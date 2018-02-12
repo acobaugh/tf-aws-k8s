@@ -5,6 +5,7 @@
 * Inspiration comes from:
 * * https://github.com/FutureSharks/tf-kops-cluster
 * * https://github.com/poseidon/typhoon
+* * https://github.com/poseidon/typhoon/pull/76
 *
 * ## Goals
 * * Fully leverage AWS-native capabilities when creating the resources. No SSH for provisioning.
