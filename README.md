@@ -24,3 +24,26 @@ Inspiration comes from:
 * Configurable security group rules for workers and controllers so that these resources may be locked down
 
 
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| asg_tags |  | string | - | yes |
+| cluster_domain_suffix |  | string | - | yes |
+| cluster_name |  | string | - | yes |
+| master_type |  | string | - | yes |
+| network_mtu |  | string | - | yes |
+| network_provider | kubernetes specifics | string | - | yes |
+| os_channel |  | string | - | yes |
+| pod_cidr |  | string | - | yes |
+| route53_zone |  | string | - | yes |
+| route53_zone_id |  | string | - | yes |
+| service_cidr |  | string | - | yes |
+| tags |  | string | - | yes |
+| vpc_id |  | string | - | yes |
+| vpc_ig_id |  | string | - | yes |
+| vpc_subnet_ids |  | string | - | yes |
+| worker_asg_max |  | string | - | yes |
+| worker_asg_min |  | string | - | yes |
+| worker_type |  | string | - | yes |
+
