@@ -28,22 +28,22 @@ Inspiration comes from:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| asg_tags |  | string | - | yes |
-| cluster_domain_suffix |  | string | - | yes |
-| cluster_name |  | string | - | yes |
-| master_type |  | string | - | yes |
-| network_mtu |  | string | - | yes |
-| network_provider | kubernetes specifics | string | - | yes |
-| os_channel |  | string | - | yes |
-| pod_cidr |  | string | - | yes |
-| route53_zone |  | string | - | yes |
-| route53_zone_id |  | string | - | yes |
-| service_cidr |  | string | - | yes |
-| tags |  | string | - | yes |
-| vpc_id |  | string | - | yes |
-| vpc_ig_id |  | string | - | yes |
-| vpc_subnet_ids |  | string | - | yes |
-| worker_asg_max |  | string | - | yes |
-| worker_asg_min |  | string | - | yes |
-| worker_type |  | string | - | yes |
+| asg_tags | Tags to be added to ASG-defined resources | map | `<map>` | no |
+| cluster_domain_suffix | Internal cluster DNS domain served by kube-dns | string | `cluster.local` | no |
+| cluster_name | Short name for this cluster | string | - | yes |
+| master_type | EC2 instance type for master nodes | string | `t2.small` | no |
+| network_mtu | CNI interface MTU. Use 8981 if you are using EC2 instances that support Jumbo frames. Only applicable with calico CNI provider | string | `1480` | no |
+| network_provider | CNI provider: calico, flannel | string | `calico` | no |
+| os_channel | Container Linux AMI channel (stable, beta, alpha) | string | `stable` | no |
+| pod_cidr | Internal IPv4 CIDR for pods | string | `10.2.0.0/16` | no |
+| route53_zone | Route53 zone to place master and apiserver ELB resource records | string | - | yes |
+| route53_zone_id | Route53 zone id to place master and apiserver ELB resource records | string | - | yes |
+| service_cidr | Internal IPv4 CIDR for services | string | `10.3.0.0/16` | no |
+| tags | Tags to be added to terraform-defined resources | map | `<map>` | no |
+| vpc_id | VPC id in which to place resources | string | - | yes |
+| vpc_ig_id | VPC Internet Gateway | string | - | yes |
+| vpc_subnet_cidrs | CIDRs of the subnets to create and launch EC2 instances in | string | - | yes |
+| worker_asg_max | Worker node autoscaling group max size | string | `1` | no |
+| worker_asg_min | Worker node autoscaling group min size | string | `1` | no |
+| worker_type | EC2 instance type for worker nodes | string | `t2.small` | no |
 
