@@ -1,5 +1,10 @@
 variable "cluster_name" {
-  description = "Short name for this cluster"
+  description = "Short name for this cluster. Should be unique across all clusters."
+  type        = "string"
+}
+
+variable "cluster_fqdn" {
+  description = "FQDN for this cluster. Should be rooted under `route53_zone`"
   type        = "string"
 }
 
@@ -13,11 +18,6 @@ variable "asg_tags" {
   description = "Tags to be added to ASG-defined resources"
   type        = "map"
   default     = {}
-}
-
-variable "route53_zone" {
-  description = "Route53 zone to place master and apiserver ELB resource records"
-  type        = "string"
 }
 
 variable "route53_zone_id" {
@@ -100,4 +100,15 @@ variable "cluster_domain_suffix" {
   description = "Internal cluster DNS domain served by kube-dns"
   type        = "string"
   default     = "cluster.local"
+}
+
+variable "bootkube_s3_bucket" {
+  description = "AWS S3 bucket to place bootkube rendered assets for usage by the masters when bootstrapping"
+  type        = "string"
+}
+
+variable "bootkube_s3_prefix" {
+  description = "AWS S3 bucket key prefix, under which bootkube-assets.zip will be placed"
+  type        = "string"
+  default     = "/"
 }
