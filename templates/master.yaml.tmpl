@@ -101,7 +101,101 @@ systemd:
         [Install]
         WantedBy=multi-user.target
 storage:
+  directories:
+    - path: /etc/ssl
+      filesystem: root
+      mode: 0500
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+    - path: /etc/ssl/etcd
+      filesystem: root
+      mode: 0500
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+    - path: /etc/ssl/etcd/etcd
+      filesystem: root
+      mode: 0500
+      user:
+      	name: etcd
+      group:
+      	name: etcd
   files:
+    - path: /etc/ssl/etcd/etcd-client-ca.crt
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
+    - path: /etc/ssl/etcd/etcd-client.crt
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
+    - path: /etc/ssl/etcd/etcd-client.key
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
+    - path: /etc/ssl/etcd/etcd/server.crt
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
+    - path: /etc/ssl/etcd/etcd/server.key
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
+    - path: /etc/ssl/etcd/etcd/peer-ca.crt
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
+    - path: /etc/ssl/etcd/etcd/peer.crt
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
+    - path: /etc/ssl/etcd/etcd/peer.key
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
+    - path: /etc/ssl/etcd/etcd/peer.key
+      filesystem: root
+      mode: 0400
+      user:
+      	name: etcd
+      group:
+      	name: etcd
+      contents:
     - path: /etc/kubernetes/kubeconfig
       filesystem: root
       mode: 0644
