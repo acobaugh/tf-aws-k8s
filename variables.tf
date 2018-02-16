@@ -102,13 +102,13 @@ variable "cluster_domain_suffix" {
   default     = "cluster.local"
 }
 
-variable "bootkube_s3_bucket" {
-  description = "AWS S3 bucket to place bootkube rendered assets for usage by the masters when bootstrapping"
+variable "config_s3_bucket" {
+  description = "AWS S3 bucket to place bootkube rendered assets and ssl material for usage by the masters when bootstrapping"
   type        = "string"
 }
 
-variable "bootkube_s3_prefix" {
-  description = "AWS S3 bucket key prefix, under which bootkube-assets.zip will be placed"
+variable "config_s3_prefix" {
+  description = "AWS S3 bucket key prefix, under which bootkube-assets.zip and various ssl files will be placed"
   type        = "string"
   default     = "/"
 }
