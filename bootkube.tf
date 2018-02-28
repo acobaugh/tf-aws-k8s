@@ -38,18 +38,6 @@ resource "null_resource" "rm-bootkube-assets" {
   }
 }
 
-locals {
-  bootkube_ssl_content = {
-    "etcd-ca.crt"     = "${module.bootkube.etcd_ca_cert}"
-    "etcd-client.crt" = "${module.bootkube.etcd_client_cert}"
-    "etcd-client.key" = "${module.bootkube.etcd_client_key}"
-    "etcd-server.crt" = "${module.bootkube.etcd_server_cert}"
-    "etcd-server.key" = "${module.bootkube.etcd_server_key}"
-    "etcd-peer.crt"   = "${module.bootkube.etcd_peer_cert}"
-    "etcd-peer.key"   = "${module.bootkube.etcd_peer_key}"
-  }
-}
-
 resource "aws_s3_bucket_object" "etcd_ca_cert" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
