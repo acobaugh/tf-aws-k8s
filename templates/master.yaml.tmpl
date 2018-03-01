@@ -87,6 +87,17 @@ systemd:
         RestartSec=10
         [Install]
         WantedBy=multi-user.target
+    - name: bootkube-assets.service
+      contents: |
+        [Unit]
+	Description=Move bootkube assets into place
+	ConditionPathExists=/tmp/bootkube-assets.zip
+	[Service]
+	Type=oneshot
+        RemainAfterExit=true
+	WorkingDirectory=/
+	ExecStartPre=mkdir /opt/bootkube
+	ExecStart=unzip /tmp/bootkube-assets.zip -d /opt/bootkube
     - name: bootkube.service
       contents: |
         [Unit]
@@ -124,6 +135,16 @@ storage:
       group:
       	name: etcd
   files:
+    - path: /tmp/bootkube-assets.zip
+      filesystem: root
+      mode: 0400
+      user:
+        name: root
+      group:
+        name: root
+      contents:
+      	remote:
+	  url: s3://${config_s3_bucket}/${config_s3_prefix}bootkube-assets.zip
     - path: /etc/ssl/etcd/etcd-client-ca.crt
       filesystem: root
       mode: 0400
