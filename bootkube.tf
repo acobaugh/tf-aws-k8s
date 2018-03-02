@@ -5,7 +5,7 @@ module "bootkube" {
   cluster_name   = "${var.cluster_name}"
   api_servers    = ["${format("api.%s", var.cluster_fqdn)}"]
   etcd_servers   = ["${aws_route53_record.etcd.*.fqdn}"]
-  asset_dir      = "${path.module}/bootkube-assets"
+  asset_dir      = "${path.cwd}/bootkube-assets"
   networking     = "${var.network_provider}"
   network_mtu    = "${var.network_mtu}"
   pod_cidr       = "${var.pod_cidr}"
@@ -15,8 +15,8 @@ module "bootkube" {
 data "archive_file" "bootkube-archive" {
   depends_on  = ["module.bootkube"]
   type        = "zip"
-  source_dir  = "${path.module}/bootkube-assets"
-  output_path = "${path.module}/bootkube-assets.zip"
+  source_dir  = "${path.cwd}/bootkube-assets"
+  output_path = "${path.cwd}/bootkube-assets.zip"
 }
 
 resource "aws_s3_bucket_object" "bootkube_assets" {
@@ -25,7 +25,7 @@ resource "aws_s3_bucket_object" "bootkube_assets" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
   key                    = "${var.config_s3_prefix}bootkube-assets.zip"
-  source                 = "${path.module}/bootkube-assets.zip"
+  source                 = "${path.cwd}/bootkube-assets.zip"
   server_side_encryption = "AES256"
   tags                   = "${var.tags}"
 }
@@ -34,7 +34,7 @@ resource "null_resource" "rm-bootkube-assets" {
   depends_on = ["aws_s3_bucket_object.bootkube_assets"]
 
   provisioner "local-exec" {
-    command = "rm -rf ${path.module}/bootkube-assets ${path.module}/bootkube-assets.zip"
+    command = "rm -rf ${path.cwd}/bootkube-assets ${path.cwd}/bootkube-assets.zip"
   }
 }
 
