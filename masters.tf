@@ -184,7 +184,6 @@ resource "aws_instance" "master" {
 
   ami                  = "${data.aws_ami.coreos.id}"
   instance_type        = "${var.master_type}"
-  key_name             = ""
   iam_instance_profile = "${aws_iam_instance_profile.master_profile.name}"
   user_data            = "${element(data.ct_config.master_ignition.*.rendered, count.index)}"
 
@@ -233,7 +232,7 @@ data "template_file" "master_ct_config" {
     kubeconfig_kubelet_cert = ""
     kubeconfig_kubelet_key  = ""
     kubeconfig_server       = ""
-    ssh_authorized_key      = ""
+    ssh_authorized_key      = "${var.ssh_key}"
     config_s3_bucket        = "${var.config_s3_bucket}"
     config_s3_prefix        = "${var.config_s3_prefix}"
     first_master            = "${var.cluster_name}-master0"

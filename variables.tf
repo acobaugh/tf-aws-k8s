@@ -20,6 +20,12 @@ variable "asg_tags" {
   default     = {}
 }
 
+variable "ssh_key" {
+  description = "SSH public key to allow login as core user on master and worker instances"
+  type        = "string"
+  default     = ""
+}
+
 variable "route53_zone_id" {
   description = "Route53 zone id to place master and apiserver ELB resource records"
   type        = "string"

@@ -253,7 +253,7 @@ data "template_file" "worker_ct_config" {
     kubeconfig_kubelet_key  = ""
     kubeconfig_kubelet_cert = ""
     kubeconfig_server       = ""
-    ssh_authorized_key      = ""
+    ssh_authorized_key      = "${var.ssh_key}"
   }
 }
 
