@@ -87,7 +87,7 @@ systemd:
           --client-ca-file=/etc/kubernetes/ca.crt \
           --cluster_dns=${k8s_dns_service_ip} \
           --cluster_domain=${cluster_domain_suffix} \
-	  --cloud-provider=aws \
+          --cloud-provider=aws \
           --cni-conf-dir=/etc/kubernetes/cni/net.d \
           --exit-on-lock-contention \
           --kubeconfig=/etc/kubernetes/kubeconfig \
@@ -105,23 +105,23 @@ systemd:
       enable: true
       contents: |
         [Unit]
-	Description=Move bootkube assets into place
-	ConditionPathExists=/tmp/bootkube-assets.zip
-	ConditionHost=${first_master}
-	[Service]
-	Type=oneshot
+        Description=Move bootkube assets into place
+        ConditionPathExists=/tmp/bootkube-assets.zip
+        ConditionHost=${first_master}
+        [Service]
+        Type=oneshot
         RemainAfterExit=true
-	WorkingDirectory=/
-	ExecStartPre=mkdir /opt/bootkube
-	ExecStart=unzip /tmp/bootkube-assets.zip -d /opt/bootkube
+        WorkingDirectory=/
+        ExecStartPre=mkdir /opt/bootkube
+        ExecStart=unzip /tmp/bootkube-assets.zip -d /opt/bootkube
     - name: bootkube.service
       contents: |
         [Unit]
         Description=Bootstrap a Kubernetes cluster
         ConditionPathExists=!/opt/bootkube/init_bootkube.done
-	ConditionFirstBoot=true
-	ConditionHost=${first_master}
-	Requires=bootkube-assets.service
+        ConditionFirstBoot=true
+        ConditionHost=${first_master}
+        Requires=bootkube-assets.service
         [Service]
         Type=oneshot
         RemainAfterExit=true
@@ -162,8 +162,8 @@ storage:
       group:
         name: root
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}bootkube-assets.zip
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}bootkube-assets.zip
     - path: /etc/ssl/etcd/etcd-client-ca.crt
       filesystem: root
       mode: 0400
@@ -310,3 +310,4 @@ passwd:
     - name: core
       ssh_authorized_keys:
         - "${ssh_authorized_key}"
+# vim:ft=yaml
