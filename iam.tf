@@ -60,11 +60,23 @@ data "aws_iam_policy_document" "master_policy_doc" {
       "autoscaling:TerminateInstanceInAutoScalingGroup",
     ]
 
+    effect = "Allow"
+
     resources = ["*"] # TODO restrict this even further
   }
 
   statement {
+    actions = ["s3:ListBucket"]
+    effect  = "Allow"
+
+    resources = [
+      "arn:aws:s3:::${var.config_s3_bucket}",
+    ]
+  }
+
+  statement {
     actions = ["s3:GetObject"]
+    effect  = "Allow"
 
     resources = [
       "arn:aws:s3:::${var.config_s3_bucket}/${var.config_s3_prefix}*",

@@ -121,5 +121,5 @@ variable "config_s3_bucket" {
 variable "config_s3_prefix" {
   description = "AWS S3 bucket key prefix, under which bootkube-assets.zip and various ssl files will be placed"
   type        = "string"
-  default     = "/"
+  default     = ""
 }
