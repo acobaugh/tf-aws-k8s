@@ -200,12 +200,7 @@ resource "aws_instance" "master" {
     ignore_changes = ["ami"]
   }
 
-  tags = {
-    Name                                        = "${var.cluster_name}-master${count.index}"
-    KubernetesCluster                           = "${var.cluster_name}"
-    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
-    "kubernetes.io/role/master"                 = true
-  }
+	tags = "${map("Name", "${var.cluster_name}-master${count.index}", "kubernetes.io/cluster/${var.cluster_name}", "owned", "KubernetesCluster", "${var.cluster_name}")}"
 }
 
 resource "null_resource" "repeat" {
