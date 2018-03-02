@@ -25,6 +25,11 @@ variable "route53_zone_id" {
   type        = "string"
 }
 
+variable "azs" {
+  description = "Availability zones. Should have an equal number of AZs as subnets."
+  type        = "list"
+}
+
 variable "vpc_id" {
   description = "VPC id in which to place resources"
   type        = "string"
@@ -37,7 +42,7 @@ variable "vpc_ig_id" {
 
 variable "vpc_subnet_cidrs" {
   description = "CIDRs of the subnets to create and launch EC2 instances in"
-  type        = "string"
+  type        = "list"
 }
 
 variable "os_channel" {

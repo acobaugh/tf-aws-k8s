@@ -48,9 +48,3 @@ data "aws_ami" "coreos" {
     values = ["CoreOS-${var.os_channel}-*"]
   }
 }
-
-data "aws_availability_zones" "available" {}
-
-locals {
-  az_names = "${sort(data.aws_availability_zones.available.names)}"
-}
