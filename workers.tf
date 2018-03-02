@@ -15,7 +15,7 @@ resource "aws_security_group_rule" "worker-icmp" {
   protocol    = "icmp"
   from_port   = 0
   to_port     = 0
-  cidr_blocks = [""]      # FIXME
+  cidr_blocks = ["0.0.0.0/0"] # FIXME
 }
 
 resource "aws_security_group_rule" "worker-ssh" {
@@ -25,7 +25,7 @@ resource "aws_security_group_rule" "worker-ssh" {
   protocol    = "tcp"
   from_port   = 22
   to_port     = 22
-  cidr_blocks = [""]      # FIXME
+  cidr_blocks = ["0.0.0.0/0"] # FIXME
 }
 
 resource "aws_security_group_rule" "worker-http" {
@@ -35,7 +35,7 @@ resource "aws_security_group_rule" "worker-http" {
   protocol    = "tcp"
   from_port   = 80
   to_port     = 80
-  cidr_blocks = [""]      # FIXME
+  cidr_blocks = ["0.0.0.0/0"] # FIXME
 }
 
 resource "aws_security_group_rule" "worker-https" {
@@ -45,7 +45,7 @@ resource "aws_security_group_rule" "worker-https" {
   protocol    = "tcp"
   from_port   = 443
   to_port     = 443
-  cidr_blocks = [""]      # FIXME
+  cidr_blocks = ["0.0.0.0/0"] # FIXME
 }
 
 resource "aws_security_group_rule" "worker-flannel" {
@@ -219,7 +219,7 @@ resource "aws_autoscaling_group" "workers" {
     {
       key                 = "Name"
       value               = "${var.cluster_name}-worker"
-      propogate_at_launch = true
+      propagate_at_launch = true
     },
   ]
 }
