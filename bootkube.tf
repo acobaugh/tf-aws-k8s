@@ -24,7 +24,7 @@ resource "aws_s3_bucket_object" "bootkube_assets" {
 
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
-  key                    = "${var.config_s3_prefix}bootkube_assets.zip"
+  key                    = "${var.config_s3_prefix}bootkube-assets.zip"
   source                 = "${path.module}/bootkube-assets.zip"
   server_side_encryption = "AES256"
   tags                   = "${var.tags}"
