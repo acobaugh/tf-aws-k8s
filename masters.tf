@@ -231,11 +231,12 @@ data "template_file" "master_ct_config" {
     cluster_domain_suffix   = "${var.cluster_domain_suffix}"
     kubeconfig_ca_cert      = ""
     kubeconfig_kubelet_cert = ""
-    kubeconfig_kubelet_key   = ""
+    kubeconfig_kubelet_key  = ""
     kubeconfig_server       = ""
     ssh_authorized_key      = ""
     config_s3_bucket        = "${var.config_s3_bucket}"
     config_s3_prefix        = "${var.config_s3_prefix}"
+    first_master            = "${var.cluster_name}-master0"
   }
 }
 
