@@ -106,104 +106,104 @@ storage:
       filesystem: root
       mode: 0500
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
     - path: /etc/ssl/etcd
       filesystem: root
       mode: 0500
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
     - path: /etc/ssl/etcd/etcd
       filesystem: root
       mode: 0500
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
   files:
     - path: /etc/ssl/etcd/etcd-client-ca.crt
       filesystem: root
       mode: 0400
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-ca.crt
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-ca.crt
     - path: /etc/ssl/etcd/etcd-client.crt
       filesystem: root
       mode: 0400
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-client.crt
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-client.crt
     - path: /etc/ssl/etcd/etcd-client.key
       filesystem: root
       mode: 0400
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-client.key
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-client.key
     - path: /etc/ssl/etcd/etcd/server.crt
       filesystem: root
       mode: 0400
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-server.crt
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-server.crt
     - path: /etc/ssl/etcd/etcd/server.key
       filesystem: root
       mode: 0400
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-server.key
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-server.key
     - path: /etc/ssl/etcd/etcd/peer-ca.crt
       filesystem: root
       mode: 0400
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-ca.crt
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-ca.crt
     - path: /etc/ssl/etcd/etcd/peer.crt
       filesystem: root
       mode: 0400
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-peer.crt
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-peer.crt
     - path: /etc/ssl/etcd/etcd/peer.key
       filesystem: root
       mode: 0400
       user:
-      	name: etcd
+        name: etcd
       group:
-      	name: etcd
+        name: etcd
       contents:
-      	remote:
-	  url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-peer.key
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-peer.key
     - path: /etc/kubernetes/kubeconfig
       filesystem: root
       mode: 0644

@@ -26,7 +26,7 @@ resource "aws_security_group_rule" "master-icmp" {
   protocol    = "icmp"
   from_port   = 0
   to_port     = 0
-  cidr_blocks = [""]      # FIXME
+  cidr_blocks = ["0.0.0.0/0"] # FIXME
 }
 
 resource "aws_security_group_rule" "master-ssh" {
@@ -36,7 +36,7 @@ resource "aws_security_group_rule" "master-ssh" {
   protocol    = "tcp"
   from_port   = 22
   to_port     = 22
-  cidr_blocks = [""]      # FIXME
+  cidr_blocks = ["0.0.0.0/0"] # FIXME
 }
 
 resource "aws_security_group_rule" "master-apiserver" {
@@ -46,7 +46,7 @@ resource "aws_security_group_rule" "master-apiserver" {
   protocol    = "tcp"
   from_port   = 443
   to_port     = 443
-  cidr_blocks = [""]      # FIXME
+  cidr_blocks = ["0.0.0.0/0"] # FIXME
 }
 
 resource "aws_security_group_rule" "master-etcd" {
@@ -231,9 +231,11 @@ data "template_file" "master_ct_config" {
     cluster_domain_suffix   = "${var.cluster_domain_suffix}"
     kubeconfig_ca_cert      = ""
     kubeconfig_kubelet_cert = ""
-    kubeconfig_kublet_key   = ""
+    kubeconfig_kubelet_key   = ""
     kubeconfig_server       = ""
     ssh_authorized_key      = ""
+    config_s3_bucket        = "${var.config_s3_bucket}"
+    config_s3_prefix        = "${var.config_s3_prefix}"
   }
 }
 
@@ -248,7 +250,7 @@ resource "aws_route53_record" "etcd" {
 
   zone_id = "${var.route53_zone_id}"
 
-  name = "${format("etcd%s.%s.", count.index, var.cluster_fqdn)}"
+  name = "${format("etcd%d.%s.", count.index, var.cluster_fqdn)}"
   type = "A"
   ttl  = 300
 

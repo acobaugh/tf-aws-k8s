@@ -27,7 +27,7 @@ resource "aws_s3_bucket_object" "bootkube_assets" {
   key                    = "${var.config_s3_prefix}bootkube_assets.zip"
   source                 = "${path.module}/bootkube-assets.zip"
   server_side_encryption = "AES256"
-  tags                   = ""
+  tags                   = "${var.tags}"
 }
 
 resource "null_resource" "rm-bootkube-assets" {
@@ -42,61 +42,61 @@ resource "aws_s3_bucket_object" "etcd_ca_cert" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
   key                    = "${var.config_s3_prefix}etcd-ca.crt"
-  contents               = "${module.bootkube.etcd_ca_cert}"
+  content                = "${module.bootkube.etcd_ca_cert}"
   server_side_encryption = "AES256"
-  tags                   = ""
+  tags                   = "${var.tags}"
 }
 
 resource "aws_s3_bucket_object" "etcd_client_cert" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
   key                    = "${var.config_s3_prefix}etcd-client.crt"
-  contents               = "${module.bootkube.etcd_client_cert}"
+  content                = "${module.bootkube.etcd_client_cert}"
   server_side_encryption = "AES256"
-  tags                   = ""
+  tags                   = "${var.tags}"
 }
 
 resource "aws_s3_bucket_object" "etcd_client_key" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
   key                    = "${var.config_s3_prefix}etcd-client.key"
-  contents               = "${module.bootkube.etcd_client_key}"
+  content                = "${module.bootkube.etcd_client_key}"
   server_side_encryption = "AES256"
-  tags                   = ""
+  tags                   = "${var.tags}"
 }
 
 resource "aws_s3_bucket_object" "etcd_server_cert" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
   key                    = "${var.config_s3_prefix}etcd-server.crt"
-  contents               = "${module.bootkube.etcd_server_cert}"
+  content                = "${module.bootkube.etcd_server_cert}"
   server_side_encryption = "AES256"
-  tags                   = ""
+  tags                   = "${var.tags}"
 }
 
 resource "aws_s3_bucket_object" "etcd_server_key" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
   key                    = "${var.config_s3_prefix}etcd-server.key"
-  contents               = "${module.bootkube.etcd_server_key}"
+  content                = "${module.bootkube.etcd_server_key}"
   server_side_encryption = "AES256"
-  tags                   = ""
+  tags                   = "${var.tags}"
 }
 
 resource "aws_s3_bucket_object" "etcd_peer_cert" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
   key                    = "${var.config_s3_prefix}etcd-peer.crt"
-  contents               = "${module.bootkube.etcd_peer_cert}"
+  content                = "${module.bootkube.etcd_peer_cert}"
   server_side_encryption = "AES256"
-  tags                   = ""
+  tags                   = "${var.tags}"
 }
 
 resource "aws_s3_bucket_object" "etcd_peer_key" {
   bucket                 = "${var.config_s3_bucket}"
   acl                    = "private"
   key                    = "${var.config_s3_prefix}etcd-peer.key"
-  contents               = "${module.bootkube.etcd_peer_key}"
+  content                = "${module.bootkube.etcd_peer_key}"
   server_side_encryption = "AES256"
-  tags                   = ""
+  tags                   = "${var.tags}"
 }
