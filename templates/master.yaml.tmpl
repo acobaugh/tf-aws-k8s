@@ -112,8 +112,8 @@ systemd:
         Type=oneshot
         RemainAfterExit=true
         WorkingDirectory=/
-        ExecStartPre=mkdir /opt/bootkube
-        ExecStart=unzip /tmp/bootkube-assets.zip -d /opt/bootkube
+        ExecStartPre=/usr/bin/mkdir /opt/bootkube
+        ExecStart=/usr/bin/unzip /tmp/bootkube-assets.zip -d /opt/bootkube
     - name: bootkube.service
       contents: |
         [Unit]
