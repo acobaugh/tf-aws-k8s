@@ -218,19 +218,16 @@ data "template_file" "master_ct_config" {
   template = "${file("${path.module}/templates/master.yaml.tmpl")}"
 
   vars = {
-    etcd_name               = "etcd${count.index}"
-    etcd_domain             = "etcd${count.index}.${var.cluster_fqdn}"
-    etcd_initial_cluster    = "${join(",", formatlist("%s=https://%s:2380", null_resource.repeat.*.triggers.name, null_resource.repeat.*.triggers.domain))}"
-    k8s_dns_service_ip      = "${cidrhost(var.service_cidr, 10)}"
-    cluster_domain_suffix   = "${var.cluster_domain_suffix}"
-    kubeconfig_ca_cert      = ""
-    kubeconfig_kubelet_cert = ""
-    kubeconfig_kubelet_key  = ""
-    kubeconfig_server       = ""
-    ssh_authorized_key      = "${var.ssh_key}"
-    config_s3_bucket        = "${var.config_s3_bucket}"
-    config_s3_prefix        = "${var.config_s3_prefix}"
-    first_master            = "${var.cluster_name}-master0"
+    etcd_name             = "etcd${count.index}"
+    etcd_domain           = "etcd${count.index}.${var.cluster_fqdn}"
+    etcd_initial_cluster  = "${join(",", formatlist("%s=https://%s:2380", null_resource.repeat.*.triggers.name, null_resource.repeat.*.triggers.domain))}"
+    k8s_dns_service_ip    = "${cidrhost(var.service_cidr, 10)}"
+    cluster_domain_suffix = "${var.cluster_domain_suffix}"
+    kubeconfig            = "${indent(10, module.bootkube.kubeconfig)}"
+    ssh_authorized_key    = "${var.ssh_key}"
+    config_s3_bucket      = "${var.config_s3_bucket}"
+    config_s3_prefix      = "${var.config_s3_prefix}"
+    first_master          = "${var.cluster_name}-master0"
   }
 }
 
