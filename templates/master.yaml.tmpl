@@ -15,7 +15,7 @@ systemd:
             Environment="ETCD_LISTEN_PEER_URLS=https://0.0.0.0:2380"
             Environment="ETCD_INITIAL_CLUSTER=${etcd_initial_cluster}"
             Environment="ETCD_STRICT_RECONFIG_CHECK=true"
-            Environment="ETCD_SSL_DIR=/etc/ssl/etcd"
+            Environment="ETCD_SSL_DIR=/etc/ssl/certs"
             Environment="ETCD_TRUSTED_CA_FILE=/etc/ssl/certs/etcd/server-ca.crt"
             Environment="ETCD_CERT_FILE=/etc/ssl/certs/etcd/server.crt"
             Environment="ETCD_KEY_FILE=/etc/ssl/certs/etcd/server.key"
@@ -106,14 +106,14 @@ systemd:
       contents: |
         [Unit]
         Description=Move bootkube assets into place
-        ConditionPathExists=/tmp/bootkube-assets.zip
+        ConditionPathExists=/opt/bootkube-assets.zip
         ConditionHost=${first_master}
         [Service]
         Type=oneshot
         RemainAfterExit=true
         WorkingDirectory=/
         ExecStartPre=/usr/bin/mkdir /opt/bootkube
-        ExecStart=/usr/bin/unzip /tmp/bootkube-assets.zip -d /opt/bootkube
+        ExecStart=/usr/bin/unzip /opt/bootkube-assets.zip -d /opt/bootkube
     - name: bootkube.service
       contents: |
         [Unit]
@@ -146,7 +146,7 @@ storage:
         name: etcd
       group:
         name: etcd
-    - path: /etc/ssl/etcd/etcd
+    - path: /etc/ssl/certs/etcd
       filesystem: root
       mode: 0500
       user:
@@ -154,7 +154,7 @@ storage:
       group:
         name: etcd
   files:
-    - path: /tmp/bootkube-assets.zip
+    - path: /opt/bootkube-assets.zip
       filesystem: root
       mode: 0400
       user:
@@ -194,7 +194,7 @@ storage:
       contents:
         remote:
           url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-client.key
-    - path: /etc/ssl/etcd/etcd/server.crt
+    - path: /etc/ssl/certs/etcd/server.crt
       filesystem: root
       mode: 0400
       user:
@@ -204,7 +204,7 @@ storage:
       contents:
         remote:
           url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-server.crt
-    - path: /etc/ssl/etcd/etcd/server.key
+    - path: /etc/ssl/certs/etcd/server.key
       filesystem: root
       mode: 0400
       user:
@@ -214,7 +214,7 @@ storage:
       contents:
         remote:
           url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-server.key
-    - path: /etc/ssl/etcd/etcd/peer-ca.crt
+    - path: /etc/ssl/certs/etcd/server-ca.crt
       filesystem: root
       mode: 0400
       user:
@@ -224,7 +224,17 @@ storage:
       contents:
         remote:
           url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-ca.crt
-    - path: /etc/ssl/etcd/etcd/peer.crt
+    - path: /etc/ssl/certs/etcd/peer-ca.crt
+      filesystem: root
+      mode: 0400
+      user:
+        name: etcd
+      group:
+        name: etcd
+      contents:
+        remote:
+          url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-ca.crt
+    - path: /etc/ssl/certs/etcd/peer.crt
       filesystem: root
       mode: 0400
       user:
@@ -234,7 +244,7 @@ storage:
       contents:
         remote:
           url: s3://${config_s3_bucket}/${config_s3_prefix}etcd-peer.crt
-    - path: /etc/ssl/etcd/etcd/peer.key
+    - path: /etc/ssl/certs/etcd/peer.key
       filesystem: root
       mode: 0400
       user:
@@ -249,22 +259,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          apiVersion: v1
-          kind: Config
-          clusters:
-          - name: local
-            cluster:
-              server: ${kubeconfig_server}
-              certificate-authority-data: ${kubeconfig_ca_cert}
-          users:
-          - name: kubelet
-            user:
-              client-certificate-data: ${kubeconfig_kubelet_cert}
-              client-key-data: ${kubeconfig_kubelet_key}
-          contexts:
-          - context:
-              cluster: local
-              user: kubelet
+          ${kubeconfig}
     - path: /etc/kubernetes/kubelet.env
       filesystem: root
       mode: 0644
