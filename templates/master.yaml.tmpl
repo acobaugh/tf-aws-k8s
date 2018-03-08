@@ -28,17 +28,17 @@ systemd:
       enable: true
     - name: locksmithd.service
       mask: true
-    - name: set-aws-fqdn.service
+    - name: set-fqdn.service
       enable: true
       contents: |
         [Unit]
         Wants=network-online.target
         After=network-online.target
-        Description=Set Hostname Workaround
+        Description=Set EC2 Instance Hostname
         Before=kubelet.service
         [Service]
         Type=oneshot
-        ExecStart=/bin/sh -c "/usr/bin/hostnamectl set-hostname $(curl -s http://169.254.169.254/latest/meta-data/hostname)"
+        ExecStart=/bin/sh -c "/usr/bin/hostnamectl set-hostname ${fqdn}"
         [Install]
         RequiredBy=kubelet.service
     - name: wait-for-dns.service
@@ -107,21 +107,28 @@ systemd:
         [Unit]
         Description=Move bootkube assets into place
         ConditionPathExists=/opt/bootkube-assets.zip
-        ConditionHost=${first_master}
+        ConditionHost=master0.*
+        ConditionFirstBoot=true
+        Requires=set-fqdn.service
+        After=set-fqdn.service
         [Service]
         Type=oneshot
         RemainAfterExit=true
         WorkingDirectory=/
-        ExecStartPre=/usr/bin/mkdir /opt/bootkube
-        ExecStart=/usr/bin/unzip /opt/bootkube-assets.zip -d /opt/bootkube
+        ExecStartPre=/usr/bin/mkdir -p /opt/bootkube
+        ExecStart=/usr/bin/unzip /opt/bootkube-assets.zip -d /opt/bootkube/assets
+        [Install]
+        WantedBy=multi-user.target
     - name: bootkube.service
+      enable: true
       contents: |
         [Unit]
         Description=Bootstrap a Kubernetes cluster
         ConditionPathExists=!/opt/bootkube/init_bootkube.done
+        ConditionHost=master0.*
         ConditionFirstBoot=true
-        ConditionHost=${first_master}
         Requires=bootkube-assets.service
+        After=bootkube-assets.service
         [Service]
         Type=oneshot
         RemainAfterExit=true
@@ -139,7 +146,7 @@ storage:
         name: etcd
       group:
         name: etcd
-    - path: /etc/ssl/etcd
+    - path: /etc/ssl/certs
       filesystem: root
       mode: 0500
       user:

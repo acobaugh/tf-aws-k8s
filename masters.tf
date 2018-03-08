@@ -218,6 +218,7 @@ data "template_file" "master_ct_config" {
   template = "${file("${path.module}/templates/master.yaml.tmpl")}"
 
   vars = {
+    fqdn                  = "master${count.index}.${var.cluster_fqdn}"
     etcd_name             = "etcd${count.index}"
     etcd_domain           = "etcd${count.index}.${var.cluster_fqdn}"
     etcd_initial_cluster  = "${join(",", formatlist("%s=https://%s:2380", null_resource.repeat.*.triggers.name, null_resource.repeat.*.triggers.domain))}"
@@ -227,7 +228,6 @@ data "template_file" "master_ct_config" {
     ssh_authorized_key    = "${var.ssh_key}"
     config_s3_bucket      = "${var.config_s3_bucket}"
     config_s3_prefix      = "${var.config_s3_prefix}"
-    first_master          = "${var.cluster_name}-master0"
   }
 }
 
@@ -235,6 +235,18 @@ data "ct_config" "master_ignition" {
   count        = "${length(var.vpc_subnet_cidrs)}"
   content      = "${element(data.template_file.master_ct_config.*.rendered, count.index)}"
   pretty_print = false
+}
+
+resource "aws_route53_record" "master" {
+  count = "${length(var.vpc_subnet_cidrs)}"
+
+  zone_id = "${var.route53_zone_id}"
+
+  name = "${format("master%d.%s.", count.index, var.cluster_fqdn)}"
+  type = "A"
+  ttl  = 300
+
+  records = ["${element(aws_instance.master.*.public_ip, count.index)}"]
 }
 
 resource "aws_route53_record" "etcd" {
