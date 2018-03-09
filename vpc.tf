@@ -6,10 +6,7 @@ resource "aws_subnet" "subnet" {
   availability_zone       = "${element(var.azs, count.index)}"
   map_public_ip_on_launch = true
 
-  tags {
-    Name              = "k8s cluster ${var.cluster_name} ${element(var.azs, count.index)} subnet"
-    KubernetesCluster = "${var.cluster_name}"
-  }
+  tags = "${merge(var.tags, map("Name", "k8s cluster ${var.cluster_name} ${element(var.azs, count.index)} subnet", "kubernetes.io/cluster/${var.cluster_name}", "owned", "KubernetesCluster", "${var.cluster_name}"))}"
 }
 
 resource "aws_route_table" "rt" {
@@ -20,9 +17,7 @@ resource "aws_route_table" "rt" {
     gateway_id = "${var.vpc_ig_id}"
   }
 
-  tags {
-    Name = "k8s cluster ${var.cluster_name} route table"
-  }
+  tags = "${merge(var.tags, map("Name", "k8s cluster ${var.cluster_name} ${element(var.azs, count.index)} route table", "kubernetes.io/cluster/${var.cluster_name}", "owned", "KubernetesCluster", "${var.cluster_name}"))}"
 }
 
 resource "aws_route_table_association" "rt_association" {

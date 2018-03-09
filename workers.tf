@@ -5,7 +5,12 @@ resource "aws_security_group" "worker" {
 
   vpc_id = "${var.vpc_id}"
 
-  tags = "${map("Name", "${var.cluster_name}-worker")}"
+  tags = "${
+		merge(
+			var.tags, 
+			map("Name", "${var.cluster_name}-master",)
+		)
+	}"
 }
 
 resource "aws_security_group_rule" "worker-icmp" {
@@ -219,6 +224,16 @@ resource "aws_autoscaling_group" "workers" {
     {
       key                 = "Name"
       value               = "${var.cluster_name}-worker"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "KubernetesCluster"
+      value               = "${var.cluster_name}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "kubernetes.io/cluster/${var.cluster_name}"
+      value               = "${var.cluster_name}"
       propagate_at_launch = true
     },
   ]

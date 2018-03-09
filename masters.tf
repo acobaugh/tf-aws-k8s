@@ -4,9 +4,16 @@ resource "aws_security_group" "master" {
   description = "${var.cluster_name} master security group"
   vpc_id      = "${var.vpc_id}"
 
-  tags {
-    Name = "${var.cluster_name}"
-  }
+  tags = "${
+		merge(
+			var.tags, 
+			map(
+				"Name", "${var.cluster_name}-master", 
+				"kubernetes.io/cluster/${var.cluster_name}", "owned", 
+				"KubernetesCluster", "${var.cluster_name}"
+			)
+		)
+	}"
 }
 
 resource "aws_security_group_rule" "master-egress" {
@@ -200,7 +207,16 @@ resource "aws_instance" "master" {
     ignore_changes = ["ami"]
   }
 
-  tags = "${map("Name", "${var.cluster_name}-master${count.index}", "kubernetes.io/cluster/${var.cluster_name}", "owned", "KubernetesCluster", "${var.cluster_name}")}"
+  tags = "${
+		merge(
+			var.tags, 
+			map(
+				"Name", "${var.cluster_name}-master${count.index}", 
+				"kubernetes.io/cluster/${var.cluster_name}", "owned", 
+				"KubernetesCluster", "${var.cluster_name}"
+			)
+		)
+	}"
 }
 
 resource "null_resource" "repeat" {
@@ -299,4 +315,11 @@ resource "aws_elb" "api" {
   idle_timeout                = 3600
   connection_draining         = true
   connection_draining_timeout = 300
+
+  tags = "${
+		merge(
+			var.tags, 
+			map("Name", "${var.cluster_name}-api")
+		)
+	}"
 }
