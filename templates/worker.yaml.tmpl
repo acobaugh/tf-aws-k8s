@@ -5,6 +5,19 @@ systemd:
       enable: true
     - name: locksmithd.service
       mask: true
+    - name: set-fqdn.service
+      enable: true
+      contents: |
+        [Unit]
+        Wants=network-online.target
+        After=network-online.target
+        Description=Set EC2 Instance Hostname
+        Before=kubelet.service
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/sh -c "/usr/bin/hostnamectl set-hostname $(curl -s http://169.254.169.254/latest/meta-data/hostname)"
+        [Install]
+        RequiredBy=kubelet.service
     - name: wait-for-dns.service
       enable: true
       contents: |
@@ -50,6 +63,7 @@ systemd:
           --client-ca-file=/etc/kubernetes/ca.crt \
           --cluster_dns=${k8s_dns_service_ip} \
           --cluster_domain=${cluster_domain_suffix} \
+          --cloud-provider=aws \
           --cni-conf-dir=/etc/kubernetes/cni/net.d \
           --exit-on-lock-contention \
           --kubeconfig=/etc/kubernetes/kubeconfig \
@@ -81,22 +95,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          apiVersion: v1
-          kind: Config
-          clusters:
-          - name: local
-            cluster:
-              server: ${kubeconfig_server}
-              certificate-authority-data: ${kubeconfig_ca_cert}
-          users:
-          - name: kubelet
-            user:
-              client-certificate-data: ${kubeconfig_kubelet_cert}
-              client-key-data: ${kubeconfig_kubelet_key}
-          contexts:
-          - context:
-              cluster: local
-              user: kubelet
+          ${kubeconfig}
     - path: /etc/kubernetes/kubelet.env
       filesystem: root
       mode: 0644

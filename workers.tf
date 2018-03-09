@@ -261,14 +261,11 @@ data "template_file" "worker_ct_config" {
   template = "${file("${path.module}/templates/worker.yaml.tmpl")}"
 
   vars = {
-    k8s_dns_service_ip      = ""
-    k8s_etcd_service_ip     = ""
-    cluster_domain_suffix   = ""
-    kubeconfig_ca_cert      = ""
-    kubeconfig_kubelet_key  = ""
-    kubeconfig_kubelet_cert = ""
-    kubeconfig_server       = ""
-    ssh_authorized_key      = "${var.ssh_key}"
+    k8s_dns_service_ip    = "${cidrhost(var.service_cidr, 10)}"
+    etcd_initial_cluster  = "${join(",", formatlist("%s=https://%s:2380", null_resource.repeat.*.triggers.name, null_resource.repeat.*.triggers.domain))}"
+    cluster_domain_suffix = "${var.cluster_domain_suffix}"
+    kubeconfig            = "${indent(10, module.bootkube.kubeconfig)}"
+    ssh_authorized_key    = "${var.ssh_key}"
   }
 }
 
