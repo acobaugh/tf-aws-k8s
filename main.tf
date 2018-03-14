@@ -21,11 +21,12 @@
 * ## Features
 * * [2-4](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/cluster-lifecycle/self-hosted-kubernetes.md) self-hosted cluster via bootkube
 * * [terraform-render-bootkube](https://github.com/poseidon/terraform-render-bootkube) to render the initial bootkube assets
-* * AWS ELB for apiserver ingress
+* * [terraform-provider-ct](https://github.com/coreos/terraform-provider-ct) to render/transpile ContainerLinux Ignition specs
+* * CoreOS's ContainerLinux AMI
+* * AWS ELB for apiserver ingress (will be switched to NLB in the near future)
 * * Configurable security group rules for workers and masters so that these resources may be locked down
 * * User-provided VPC, user-defined AZs, user-defined subnets. Subnets are created 1-per-AZ within the specified VPC
 * * Custom tagging of resources in addition to those tags necessary for K8s to interface with AWS
-* * Container Linux AMIs
 * * Calico (preferred) or flannel CNI provider
 */
 
