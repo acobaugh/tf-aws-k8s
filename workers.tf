@@ -14,43 +14,47 @@ resource "aws_security_group" "worker" {
 }
 
 resource "aws_security_group_rule" "worker-icmp" {
+  count             = "${length(var.worker_icmp_src_cidrs) > 0 ? 1 : 0}"
   security_group_id = "${aws_security_group.worker.id}"
 
   type        = "ingress"
   protocol    = "icmp"
   from_port   = 0
   to_port     = 0
-  cidr_blocks = ["0.0.0.0/0"] # FIXME
+  cidr_blocks = ["${var.worker_icmp_src_cidrs}"]
 }
 
 resource "aws_security_group_rule" "worker-ssh" {
+  count             = "${length(var.worker_ssh_src_cidrs) > 0 ? 1 : 0}"
   security_group_id = "${aws_security_group.worker.id}"
 
   type        = "ingress"
   protocol    = "tcp"
   from_port   = 22
   to_port     = 22
-  cidr_blocks = ["0.0.0.0/0"] # FIXME
+  cidr_blocks = ["${var.worker_ssh_src_cidrs}"]
 }
 
 resource "aws_security_group_rule" "worker-http" {
+  count             = "${length(var.worker_https_src_cidrs) > 0 ? 1 : 0}"
   security_group_id = "${aws_security_group.worker.id}"
 
   type        = "ingress"
   protocol    = "tcp"
   from_port   = 80
   to_port     = 80
-  cidr_blocks = ["0.0.0.0/0"] # FIXME
+  cidr_blocks = ["${var.worker_https_src_cidrs}"]
 }
 
 resource "aws_security_group_rule" "worker-https" {
+  count             = "${length(var.worker_https_src_cidrs) > 0 ? 1 : 0}"
   security_group_id = "${aws_security_group.worker.id}"
 
   type        = "ingress"
   protocol    = "tcp"
   from_port   = 443
   to_port     = 443
-  cidr_blocks = ["0.0.0.0/0"] # FIXME
+  cidr_blocks = ["${var.worker_https_src_cidrs}"]
 }
 
 resource "aws_security_group_rule" "worker-flannel" {

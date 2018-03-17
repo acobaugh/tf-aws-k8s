@@ -33,7 +33,7 @@ resource "aws_security_group_rule" "master-icmp" {
   protocol    = "icmp"
   from_port   = 0
   to_port     = 0
-  cidr_blocks = ["0.0.0.0/0"] # FIXME
+  cidr_blocks = ["${var.master_icmp_src_cidrs}"]
 }
 
 resource "aws_security_group_rule" "master-ssh" {
@@ -43,7 +43,7 @@ resource "aws_security_group_rule" "master-ssh" {
   protocol    = "tcp"
   from_port   = 22
   to_port     = 22
-  cidr_blocks = ["0.0.0.0/0"] # FIXME
+  cidr_blocks = ["${var.master_ssh_src_cidrs}"]
 }
 
 resource "aws_security_group_rule" "master-apiserver" {
@@ -53,7 +53,7 @@ resource "aws_security_group_rule" "master-apiserver" {
   protocol    = "tcp"
   from_port   = 443
   to_port     = 443
-  cidr_blocks = ["0.0.0.0/0"] # FIXME
+  cidr_blocks = ["${var.master_https_src_cidrs}"]
 }
 
 resource "aws_security_group_rule" "master-etcd" {

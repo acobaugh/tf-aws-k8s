@@ -123,3 +123,39 @@ variable "config_s3_prefix" {
   type        = "string"
   default     = ""
 }
+
+variable "master_icmp_src_cidrs" {
+  description = "CIDRs that are allowed to send ICMP to Masters and API LB"
+  type        = "list"
+  default     = ["0.0.0.0/0"]
+}
+
+variable "master_ssh_src_cidrs" {
+  description = "CIDRs that are allowed to SSH to Masters"
+  type        = "list"
+  default     = ["0.0.0.0/0"]
+}
+
+variable "master_https_src_cidrs" {
+  description = "CIDRs that are allowed to https to Masters and API LB"
+  type        = "list"
+  default     = ["0.0.0.0/0"]
+}
+
+variable "worker_icmp_src_cidrs" {
+  description = "CIDRs that are allowed to send ICMP to workers"
+  type        = "list"
+  default     = []
+}
+
+variable "worker_ssh_src_cidrs" {
+  description = "CIDRs that are allowed to SSH to workers"
+  type        = "list"
+  default     = []
+}
+
+variable "worker_https_src_cidrs" {
+  description = "CIDRs that are allowed to http(s) to workers and API LB"
+  type        = "list"
+  default     = []
+}
