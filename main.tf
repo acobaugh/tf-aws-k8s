@@ -28,6 +28,15 @@
 * * User-provided VPC, user-defined AZs, user-defined subnets. Subnets are created 1-per-AZ within the specified VPC
 * * Custom tagging of resources in addition to those tags necessary for K8s to interface with AWS
 * * Calico (preferred) or flannel CNI provider
+* 
+* ## Usage
+* ```
+* export cluster_name=$(terraform output cluster_name)
+* export KUBECONFIG=~/.kube/$cluster_name
+* terraform output user-kubeconfig > $KUBECONFIG
+* kubectl config use-context ${cluster_name}-context
+* kubectl cluster-info
+* ```
 */
 
 data "aws_ami" "coreos" {

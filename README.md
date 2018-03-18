@@ -28,6 +28,15 @@ Inspiration comes from:
 * Custom tagging of resources in addition to those tags necessary for K8s to interface with AWS
 * Calico (preferred) or flannel CNI provider
 
+## Usage
+```
+export cluster_name=$(terraform output cluster_name)
+export KUBECONFIG=~/.kube/$cluster_name
+terraform output user-kubeconfig > $KUBECONFIG
+kubectl config use-context ${cluster_name}-context
+kubectl cluster-info
+```
+
 
 ## Inputs
 
@@ -40,6 +49,10 @@ Inspiration comes from:
 | cluster_name | Short name for this cluster. Should be unique across all clusters. | string | - | yes |
 | config_s3_bucket | AWS S3 bucket to place bootkube rendered assets and ssl material for usage by the masters when bootstrapping | string | - | yes |
 | config_s3_prefix | AWS S3 bucket key prefix, under which bootkube-assets.zip and various ssl files will be placed | string | `` | no |
+| ipv6_subnet_offset | Base /64 subnet number to start creating subnets at. Eg. the N in x:x:x:N::/64 | string | - | yes |
+| master_https_src_cidrs | CIDRs that are allowed to https to Masters and API LB | list | `<list>` | no |
+| master_icmp_src_cidrs | CIDRs that are allowed to send ICMP to Masters and API LB | list | `<list>` | no |
+| master_ssh_src_cidrs | CIDRs that are allowed to SSH to Masters | list | `<list>` | no |
 | master_type | EC2 instance type for master nodes | string | `t2.small` | no |
 | network_mtu | CNI interface MTU. Use 8981 if you are using EC2 instances that support Jumbo frames. Only applicable with calico CNI provider | string | `1480` | no |
 | network_provider | CNI provider: calico, flannel | string | `calico` | no |
@@ -51,9 +64,13 @@ Inspiration comes from:
 | tags | Tags to be added to terraform-defined resources | map | `<map>` | no |
 | vpc_id | VPC id in which to place resources | string | - | yes |
 | vpc_ig_id | VPC Internet Gateway | string | - | yes |
+| vpc_ipv6_cidr_block | IPv6 /56 CIDR block for the VPC. Subnets will be calculated out of this block. | string | - | yes |
 | vpc_subnet_cidrs | CIDRs of the subnets to create and launch EC2 instances in | list | - | yes |
 | worker_asg_max | Worker node autoscaling group max size | string | `1` | no |
 | worker_asg_min | Worker node autoscaling group min size | string | `1` | no |
+| worker_https_src_cidrs | CIDRs that are allowed to http(s) to workers and API LB | list | `<list>` | no |
+| worker_icmp_src_cidrs | CIDRs that are allowed to send ICMP to workers | list | `<list>` | no |
+| worker_ssh_src_cidrs | CIDRs that are allowed to SSH to workers | list | `<list>` | no |
 | worker_type | EC2 instance type for worker nodes | string | `t2.small` | no |
 
 ## Outputs
