@@ -265,6 +265,18 @@ resource "aws_route53_record" "master" {
   records = ["${element(aws_instance.master.*.public_ip, count.index)}"]
 }
 
+resource "aws_route53_record" "master-v6" {
+  count = "${length(var.vpc_subnet_cidrs)}"
+
+  zone_id = "${var.route53_zone_id}"
+
+  name = "${format("master%d.%s.", count.index, var.cluster_fqdn)}"
+  type = "AAAA"
+  ttl  = 300
+
+  records = ["${element(aws_instance.master.*.ipv6_addresses.0, count.index)}"]
+}
+
 resource "aws_route53_record" "etcd" {
   count = "${length(var.vpc_subnet_cidrs)}"
 
