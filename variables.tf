@@ -46,6 +46,16 @@ variable "vpc_ig_id" {
   type        = "string"
 }
 
+variable "vpc_ipv6_cidr_block" {
+  description = "IPv6 /56 CIDR block for the VPC. Subnets will be calculated out of this block."
+  type        = "string"
+}
+
+variable "ipv6_subnet_offset" {
+  description = "Base /64 subnet number to start creating subnets at. Eg. the N in x:x:x:N::/64"
+  type        = "string"
+}
+
 variable "vpc_subnet_cidrs" {
   description = "CIDRs of the subnets to create and launch EC2 instances in"
   type        = "list"
