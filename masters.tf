@@ -274,7 +274,7 @@ resource "aws_route53_record" "master-v6" {
   type = "AAAA"
   ttl  = 300
 
-  records = ["${element(aws_instance.master.*.ipv6_addresses.0, count.index)}"]
+  records = ["${element(aws_instance.master.*.ipv6_addresses[0], count.index)}"]
 }
 
 resource "aws_route53_record" "etcd" {
@@ -305,7 +305,6 @@ resource "aws_route53_record" "api" {
 resource "aws_lb" "api" {
   name            = "${var.cluster_name}-api"
   subnets         = ["${aws_subnet.subnet.*.id}"]
-  security_groups = ["${aws_security_group.master.id}"]
 
   load_balancer_type = "network"
 
@@ -344,8 +343,7 @@ resource "aws_lb_target_group" "api" {
     protocol            = "HTTPS"
     healthy_threshold   = 3
     unhealthy_threshold = 3
-    timeout             = 5
-    interval            = 5
+    interval            = 10
   }
 
   tags = "${
