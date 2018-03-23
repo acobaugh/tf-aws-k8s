@@ -32,6 +32,9 @@ resource "aws_s3_bucket_object" "bootkube_assets" {
 
 resource "null_resource" "rm-bootkube-assets" {
   depends_on = ["aws_s3_bucket_object.bootkube_assets"]
+	triggers {
+		bootkube-archive = "${data.archive_file.bootkube-archive.output_sha}"
+	}
 
   provisioner "local-exec" {
     command = "rm -rf ${path.cwd}/bootkube-assets ${path.cwd}/bootkube-assets.zip"
