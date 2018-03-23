@@ -6,6 +6,12 @@ Inspiration comes from:
 * https://github.com/poseidon/typhoon
 * https://github.com/poseidon/typhoon/pull/76
 
+## Versions
+* Kubernetes 1.9.6
+* etcd 3.3.2
+* Calico 3.0.4
+* Flannel 0.10.0
+
 ## Goals
 * Fully leverage AWS-native capabilities when creating the resources. No SSH for provisioning.
 * Allow placement within a predefined VPC.
@@ -22,6 +28,7 @@ Inspiration comes from:
 * [terraform-render-bootkube](https://github.com/poseidon/terraform-render-bootkube) to render the initial bootkube assets
 * [terraform-provider-ct](https://github.com/coreos/terraform-provider-ct) to render/transpile ContainerLinux Ignition specs
 * CoreOS's ContainerLinux AMI
+* Kubernetes via [Hyperkube](https://github.com/kubernetes/kubernetes/tree/master/cluster/images/hyperkube)
 * AWS ELB for apiserver ingress (will be switched to NLB in the near future)
 * Configurable security group rules for workers and masters so that these resources may be locked down
 * User-provided VPC, user-defined AZs, user-defined subnets. Subnets are created 1-per-AZ within the specified VPC
