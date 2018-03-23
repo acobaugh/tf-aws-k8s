@@ -296,37 +296,20 @@ resource "aws_route53_record" "api" {
   type = "A"
 
   alias {
-    name                   = "${aws_elb.api.dns_name}"
-    zone_id                = "${aws_elb.api.zone_id}"
+    name                   = "${aws_lb.api.dns_name}"
+    zone_id                = "${aws_lb.api.zone_id}"
     evaluate_target_health = true
   }
 }
 
-resource "aws_elb" "api" {
+resource "aws_lb" "api" {
   name            = "${var.cluster_name}-api"
   subnets         = ["${aws_subnet.subnet.*.id}"]
   security_groups = ["${aws_security_group.master.id}"]
 
-  listener {
-    lb_port           = 443
-    lb_protocol       = "tcp"
-    instance_port     = 443
-    instance_protocol = "tcp"
-  }
+  load_balancer_type = "network"
 
-  instances = ["${aws_instance.master.*.id}"]
-
-  health_check {
-    target              = "SSL:443"
-    healthy_threshold   = 2
-    unhealthy_threshold = 4
-    timeout             = 5
-    interval            = 6
-  }
-
-  idle_timeout                = 3600
-  connection_draining         = true
-  connection_draining_timeout = 300
+  subnets = ["${aws_subnet.subnet.*.id}"]
 
   tags = "${
 		merge(
@@ -334,4 +317,49 @@ resource "aws_elb" "api" {
 			map("Name", "${var.cluster_name}-api")
 		)
 	}"
+}
+
+resource "aws_lb_listener" "api" {
+  load_balancer_arn = "${aws_lb.api.arn}"
+
+  port     = 443
+  protocol = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.api.arn}"
+  }
+}
+
+resource "aws_lb_target_group" "api" {
+  name     = "${var.cluster_name}-api"
+  vpc_id   = "${var.vpc_id}"
+  port     = 443
+  protocol = "TCP"
+
+  target_type = "instance"
+
+  health_check {
+    port                = 443
+    protocol            = "HTTPS"
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
+    timeout             = 5
+    interval            = 5
+  }
+
+  tags = "${
+		merge(
+			var.tags, 
+			map("Name", "${var.cluster_name}-api")
+		)
+	}"
+}
+
+resource "aws_lb_target_group_attachment" "controllers" {
+  count = "${length(var.vpc_subnet_cidrs)}"
+
+  target_group_arn = "${aws_lb_target_group.api.arn}"
+  target_id        = "${element(aws_instance.master.*.id, count.index)}"
+  port             = 443
 }
