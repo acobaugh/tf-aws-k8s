@@ -9,7 +9,7 @@ This is a Terraform module to build a Kubernetes cluster in AWS.
 | asg_tags | Tags to be added to ASG-defined resources | map | `<map>` | no |
 | azs | Availability zones. Should have an equal number of AZs as subnets. | list | - | yes |
 | cluster_domain_suffix | Internal cluster DNS domain served by kube-dns | string | `cluster.local` | no |
-| cluster_fqdn | FQDN for this cluster. Should be rooted under `route53_zone` | string | - | yes |
+| cluster_fqdn | FQDN for this cluster. Should be rooted under `route53_zone`. api, master*, and etcd* entries are created under this domain | string | - | yes |
 | cluster_name | Short name for this cluster. Should be unique across all clusters. | string | - | yes |
 | config_s3_bucket | AWS S3 bucket to place bootkube rendered assets and ssl material for usage by the masters when bootstrapping | string | - | yes |
 | config_s3_prefix | AWS S3 bucket key prefix, under which bootkube-assets.zip and various ssl files will be placed | string | `` | no |
@@ -21,9 +21,9 @@ This is a Terraform module to build a Kubernetes cluster in AWS.
 | network_mtu | CNI interface MTU. Use 8981 if you are using EC2 instances that support Jumbo frames. Only applicable with calico CNI provider | string | `1480` | no |
 | network_provider | CNI provider: calico, flannel | string | `calico` | no |
 | os_channel | Container Linux AMI channel (stable, beta, alpha) | string | `stable` | no |
-| pod_cidr | Internal IPv4 CIDR for pods | string | `10.2.0.0/16` | no |
-| route53_zone_id | Route53 zone id to place master and apiserver ELB resource records | string | - | yes |
-| service_cidr | Internal IPv4 CIDR for services | string | `10.3.0.0/16` | no |
+| pod_cidr | Internal IPv4 CIDR for pods | string | - | yes |
+| route53_zone_id | Route53 zone id corresponding to cluster_fqdn. | string | - | yes |
+| service_cidr | Internal IPv4 CIDR for services | string | - | yes |
 | ssh_key | SSH public key to allow login as core user on master and worker instances | string | `` | no |
 | tags | Tags to be added to terraform-defined resources | map | `<map>` | no |
 | vpc_id | VPC id in which to place resources | string | - | yes |
