@@ -4,7 +4,12 @@ variable "cluster_name" {
 }
 
 variable "cluster_fqdn" {
-  description = "FQDN for this cluster. Should be rooted under `route53_zone`"
+  description = "FQDN for this cluster. Should be rooted under `route53_zone`. api, master*, and etcd* entries are created under this domain"
+  type        = "string"
+}
+
+variable "route53_zone_id" {
+  description = "Route53 zone id corresponding to cluster_fqdn."
   type        = "string"
 }
 
@@ -24,11 +29,6 @@ variable "ssh_key" {
   description = "SSH public key to allow login as core user on master and worker instances"
   type        = "string"
   default     = ""
-}
-
-variable "route53_zone_id" {
-  description = "Route53 zone id to place master and apiserver ELB resource records"
-  type        = "string"
 }
 
 variable "azs" {
@@ -108,13 +108,11 @@ variable "network_mtu" {
 variable "pod_cidr" {
   description = "Internal IPv4 CIDR for pods"
   type        = "string"
-  default     = "10.2.0.0/16"
 }
 
 variable "service_cidr" {
   description = "Internal IPv4 CIDR for services"
   type        = "string"
-  default     = "10.3.0.0/16"
 }
 
 variable "cluster_domain_suffix" {
