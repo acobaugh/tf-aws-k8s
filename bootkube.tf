@@ -1,5 +1,5 @@
 module "bootkube" {
-  source = "git::github.com/poseidon/terraform-render-bootkube?ref=88b361207d42ec3121930a4add6b64ba7cf18360"
+  source = "git::github.com/poseidon/terraform-render-bootkube?ref=911f4115088b7511f29221f64bf8e93bfa9ee567"
 
   cloud_provider = "aws"
   cluster_name   = "${var.cluster_name}"
